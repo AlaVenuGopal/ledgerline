@@ -17,6 +17,8 @@ target/
 *.tar.gz
 *.rar
 .mvn/wrapper/maven-wrapper.jar
+tools/
+
 
 # Node & Frontend
 node_modules/
