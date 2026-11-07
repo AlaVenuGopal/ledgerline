@@ -69,3 +69,47 @@ This log records genuine interactions, recommendations, critical evaluations, an
 - **Relevant Git commit**: [`ec52f51`](file:///C:/Users/venug/.gemini/antigravity/scratch/ledgerline) ("feat(backend): implement double-entry ledger, concurrency locking, idempotency, RBAC, and verified tests")
 
 ---
+
+### Entry 4 — Phase 3: Server-Side Authorisation vs Frontend UI Hiding
+- **Date**: 2026-11-07
+- **AI Tool Used**: Google Antigravity (Gemini 3.8 Flash)
+- **What I asked it to do**:
+  Implement authorization and role boundaries to ensure Account Holders cannot perform administrative tasks or access other users' accounts, and Auditors cannot initiate transactions.
+- **What the AI generated or suggested**:
+  - The AI initially suggested hiding the "Transfer" button and "Admin" navigation links in the React frontend based on the user's role stored in `localStorage`.
+- **What was incorrect, incomplete or risky**:
+  - Client-side hiding provides zero security in a financial banking engine.
+  - Anyone with browser developer tools or a tool like Postman / `curl` can forge HTTP requests directly to `/api/transactions/transfer` or `/api/admin/users`, completely bypassing React UI checks.
+  - Relying on client-supplied user IDs or role claims in request bodies introduces Insecure Direct Object Reference (IDOR) and horizontal privilege escalation.
+- **How I verified the issue**:
+  - Sent forged curl requests with an Account Holder's JWT token to `/api/admin/users` and `/api/transactions/transfer` with another user's account ID.
+- **What I changed or rejected**:
+  - Rejected client-only role filtering as an authorization mechanism.
+  - Enforced strict backend role-based access control with `@PreAuthorize("hasRole('ADMINISTRATOR')")` and `@PreAuthorize("hasAnyRole('ACCOUNT_HOLDER', 'ADMINISTRATOR')")` on all Spring controllers.
+  - Implemented server-side ownership validation in `AccountService.validateOwnership(account, principal)`: the authenticated `UserPrincipal.getId()` extracted directly from the verified cryptographic JWT must match the account owner's ID, or a 403 Forbidden is thrown.
+  - Validated with automated tests `RoleAuthorizationSecurityTests` and `AccountOwnershipTests`.
+- **Relevant Git commit**: [`ec52f51`](file:///C:/Users/venug/.gemini/antigravity/scratch/ledgerline) ("feat(backend): implement double-entry ledger, concurrency locking, idempotency, RBAC, and verified tests")
+
+---
+
+### Entry 5 — Phase 4: Financial Minor Units (Paise) vs Floating-Point Precision
+- **Date**: 2026-11-07
+- **AI Tool Used**: Google Antigravity (Gemini 3.8 Flash)
+- **What I asked it to do**:
+  Design the currency handling and transaction amount data types across the frontend forms, DTOs, and database schema.
+- **What the AI generated or suggested**:
+  - The AI proposed using `double` or standard `Double` fields for monetary balances and transaction amounts in rupees (e.g., `Double amount = 150.50`).
+- **What was incorrect, incomplete or risky**:
+  - Floating-point representations (`double` / `float`) adhere to IEEE 754 standards, which cannot accurately represent decimal fractions in binary (e.g., `0.1 + 0.2 = 0.30000000000000004`).
+  - In a financial ledger, rounding discrepancies accumulate over repeated transfers, creating ledger imbalance where total debits no longer equal total credits.
+- **How I verified the issue**:
+  - Tested running floating-point additions across 1,000 transfer iterations in a scratch script, observing cumulative cent/paisa rounding errors.
+- **What I changed or rejected**:
+  - Rejected all floating-point data types for financial balances.
+  - Adopted strictly integer minor units (`BIGINT` paise in PostgreSQL, `Long` in Java). ₹1.00 is stored as 100 paise.
+  - Configured PostgreSQL database constraints `CONSTRAINT chk_account_balance_non_negative CHECK (balance_paise >= 0)` and `CHECK (amount_paise > 0)`.
+  - Frontend converts user rupee input to paise (`Math.round(rupees * 100)`) before transmission, and converts paise to rupees purely for visual formatting.
+  - Validated with `FinancialEngineTests` confirming exact zero-error balance conservation.
+- **Relevant Git commit**: [`ec52f51`](file:///C:/Users/venug/.gemini/antigravity/scratch/ledgerline) ("feat(backend): implement double-entry ledger, concurrency locking, idempotency, RBAC, and verified tests")
+
+---
