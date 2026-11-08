@@ -27,12 +27,13 @@
 - [x] Concurrent transfers are tested (20 bidirectional iterations without deadlocks via ascending lock ordering).
 - [x] Auditor is read-only (auditor write attempts rejected with 403 Forbidden).
 - [x] Audit trail works (append-only events logged with IP, timestamp, actor, status).
-- [x] Frontend APIs work and reflect real backend data (zero fake data).
+- [x] Backend starts and serves live traffic on port 8088 (`http://localhost:8088/api/health`).
+- [x] Frontend starts and connects to live backend on port 5173 (`http://127.0.0.1:5173`).
 - [x] Production builds pass (`mvnw.cmd clean test` passes 17/17; Vite `npm run build` passes).
 - [x] README.md is accurate with verified Windows commands.
 - [x] THREATS.md is accurate with 15-point threat model, mitigations, and test mappings.
-- [x] PROMPTS.md has 5 genuine dated entries with commit links.
-- [ ] Deployment to external cloud provider (prepared for Render / Vercel / Neon).
+- [x] PROMPTS.md has 6 genuine dated entries with commit links.
+- [ ] Cloud deployment to public URL (ready with Dockerfile and render.yaml).
 - [ ] Live URL opens in incognito mode without errors.
 - [x] Demo credentials work (`alice`, `bob`, `admin`, `auditor`).
 - [x] Six submission answers are prepared and verified in `SUBMISSION_ANSWERS.md`.
@@ -51,8 +52,9 @@
 | **Phase 5** | Financial Safety (Idempotency, Concurrency, Audit) | **COMPLETED** | Row-level pessimistic locking (`PESSIMISTIC_WRITE`), deterministic ascending lock ordering, SHA-256 idempotency cache, append-only audit trail. |
 | **Phase 6** | Frontend Dashboard & Forms | **COMPLETED** | Complete React dashboard: Login, Accounts, Transfer with lookup, Deposit/Withdraw, Transaction History with ledger expansion, Auditor portal with live proof, Admin control panel. |
 | **Phase 7** | Testing & Verification | **COMPLETED** | 17/17 tests passing across `AuthenticationSecurityTests`, `RoleAuthorizationSecurityTests`, `AccountOwnershipTests`, `FinancialEngineTests`, `IdempotencyTests`, `ConcurrencyTests`. |
-| **Phase 8** | Documentation & Security Model | **COMPLETED** | Complete `README.md`, comprehensive `THREATS.md`, 5 entries in `PROMPTS.md`. |
+| **Phase 8** | Documentation & Security Model | **COMPLETED** | Complete `README.md`, comprehensive `THREATS.md`, 6 entries in `PROMPTS.md`. |
 | **Phase 9** | Final Submission Materials | **COMPLETED** | `SUBMISSION_ANSWERS.md` containing truthful answers to all 6 Snovasys challenge questions. |
+| **Phase 10** | Live Local Verification | **COMPLETED** | Backend active on `http://localhost:8088`, Frontend on `http://127.0.0.1:5173`. Transfer, ledger entries, and idempotency verified live. |
 
 ---
 
@@ -87,4 +89,6 @@
 - `c50c83e`: "docs: initialize workspace, project status, threat model and prompts log"
 - `ec52f51`: "feat(backend): implement double-entry ledger, concurrency locking, idempotency, RBAC, and verified tests"
 - `5bc63f1`: "feat(frontend): implement responsive financial dashboard, statements, transfer receipt, and auditor proof views"
-- (Next): "docs: complete threat model, submission answers, and project documentation"
+- `8a414e8`: "docs: complete comprehensive README, 15-point THREATS model, PROMPTS log, and official challenge submission answers"
+- `a41a573`: "fix: resolve port conflict and JPA dialect compatibility for local runtime"
+
