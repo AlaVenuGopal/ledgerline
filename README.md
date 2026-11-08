@@ -112,7 +112,7 @@ From the project root:
 cd backend
 .\mvnw.cmd spring-boot:run
 ```
-The backend starts on `http://localhost:8080`. Flyway automatically executes migrations and `DataInitializer` seeds demonstration accounts.
+The backend starts on `http://localhost:8088` (configurable via `PORT` environment variable). Flyway automatically executes migrations and `DataInitializer` seeds demonstration accounts.
 
 ### B. Run Frontend
 In a separate terminal:
