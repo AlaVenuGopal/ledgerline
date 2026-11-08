@@ -74,7 +74,7 @@ git clone <repository-url>
 cd ledgerline
 ```
 
-#### 2. Run Backend (Port 8080)
+#### 2. Run Backend (Port 8088)
 On Windows:
 ```powershell
 cd backend
@@ -85,7 +85,7 @@ On Linux / macOS:
 cd backend
 ./mvnw spring-boot:run
 ```
-*(The backend automatically initializes an in-memory database in PostgreSQL compatibility mode, executes Flyway migrations, and seeds demonstration accounts).*
+*(The backend automatically initializes an in-memory database in PostgreSQL compatibility mode, executes Flyway migrations, and seeds demonstration accounts on port 8088).*
 
 #### 3. Run Frontend (Port 5173)
 In a separate terminal:
