@@ -113,3 +113,22 @@ This log records genuine interactions, recommendations, critical evaluations, an
 - **Relevant Git commit**: [`ec52f51`](file:///C:/Users/venug/.gemini/antigravity/scratch/ledgerline) ("feat(backend): implement double-entry ledger, concurrency locking, idempotency, RBAC, and verified tests")
 
 ---
+
+### Entry 6 — Phase 6: Port Conflict Resolution & JPA Dialect Strategy
+- **Date**: 2026-11-08
+- **AI Tool Used**: Google Antigravity (Gemini 3.8 Flash)
+- **What I asked it to do**:
+  Launch the backend server locally to execute end-to-end integration verification with the React frontend.
+- **What the AI generated or suggested**:
+  - The AI attempted to launch Spring Boot on default port 8080 with `org.hibernate.dialect.PostgreSQLDialect` configured as the default database platform.
+- **What was incorrect, incomplete or risky**:
+  1. Port 8080 was already permanently occupied by an existing local process (Oracle TNS Listener `TNSLSNR.exe`), causing port bind failure `PortInUseException`.
+  2. When falling back to H2 in-memory database for local developer mode without an external PostgreSQL instance running, `PostgreSQLDialect` generated `INSERT ... RETURNING id` queries. H2 in PostgreSQL compatibility mode rejects the `RETURNING id` clause with `JdbcSQLSyntaxErrorException: Syntax error in SQL statement ... [*]returning id`.
+- **How I verified the issue**:
+  - Inspected Windows port listening table with `netstat -ano | findstr 8080`, identifying PID 5600 holding port 8080.
+  - Inspected Spring Boot crash logs showing H2 syntax error on table `users` during `DataInitializer` entity persistence.
+- **What I changed or rejected**:
+  1. Configured default port to `${PORT:8088}` in `application.yml` and synchronized Vite frontend `api.js` base URL to target `http://localhost:8088`.
+  2. Configured dynamic JPA dialect: `${SPRING_JPA_DIALECT:org.hibernate.dialect.H2Dialect}` as the default in `application.yml`, while preserving `PostgreSQLDialect` in `application-postgres.yml` for production deployments.
+  3. Re-packaged the application and successfully started Tomcat on port 8088, verifying zero syntax errors during demo data initialization and confirming HTTP 200 on health and login endpoints.
+- **Relevant Git commit**: [`9ef6a02`](file:///C:/Users/venug/.gemini/antigravity/scratch/ledgerline) ("fix(backend): resolve port conflict and JPA dialect compatibility")

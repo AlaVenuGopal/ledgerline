@@ -1,7 +1,7 @@
 // frontend/src/services/api.js
 // Centralized API Service Layer for LedgerLine
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8088';
 
 export async function apiRequest(endpoint, options = {}) {
     const token = localStorage.getItem('ledgerline_token');

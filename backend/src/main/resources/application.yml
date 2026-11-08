@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: ${PORT:8088}
   error:
     include-message: never
     include-binding-errors: never
@@ -19,7 +19,7 @@ spring:
       connection-timeout: 30000
       minimum-idle: 10
   jpa:
-    database-platform: ${SPRING_JPA_DIALECT:org.hibernate.dialect.PostgreSQLDialect}
+    database-platform: ${SPRING_JPA_DIALECT:org.hibernate.dialect.H2Dialect}
     hibernate:
       ddl-auto: validate
     show-sql: false
