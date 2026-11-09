@@ -3,7 +3,7 @@
 **Challenge**: Snovasys Fresher Hiring Challenge 2026  
 **Candidate & Project Owner**: Venu Gopal  
 **Architecture**: React + Vite (Frontend) | Java 21 / Spring Boot 3.3.5 (Backend) | PostgreSQL + Flyway (Database)  
-**Last Updated**: 2026-11-07  
+**Last Updated**: 2026-11-08  
 
 ---
 
@@ -32,7 +32,7 @@
 - [x] Production builds pass (`mvnw.cmd clean test` passes 17/17; Vite `npm run build` passes).
 - [x] README.md is accurate with verified Windows commands.
 - [x] THREATS.md is accurate with 15-point threat model, mitigations, and test mappings.
-- [x] PROMPTS.md has 6 genuine dated entries with commit links.
+- [x] PROMPTS.md has 7 genuine dated entries with commit links.
 - [ ] Cloud deployment to public URL (ready with Dockerfile and render.yaml).
 - [ ] Live URL opens in incognito mode without errors.
 - [x] Demo credentials work (`alice`, `bob`, `admin`, `auditor`).

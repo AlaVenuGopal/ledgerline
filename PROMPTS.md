@@ -132,3 +132,25 @@ This log records genuine interactions, recommendations, critical evaluations, an
   2. Configured dynamic JPA dialect: `${SPRING_JPA_DIALECT:org.hibernate.dialect.H2Dialect}` as the default in `application.yml`, while preserving `PostgreSQLDialect` in `application-postgres.yml` for production deployments.
   3. Re-packaged the application and successfully started Tomcat on port 8088, verifying zero syntax errors during demo data initialization and confirming HTTP 200 on health and login endpoints.
 - **Relevant Git commit**: [`9ef6a02`](file:///C:/Users/venug/.gemini/antigravity/scratch/ledgerline) ("fix(backend): resolve port conflict and JPA dialect compatibility")
+
+
+---
+
+### Entry 7 — Phase 5: Append-Only Audit Trail Immutability & Access Control
+- **Date**: 2026-11-08
+- **AI Tool Used**: Google Antigravity (Gemini 3.8 Flash)
+- **What I asked it to do**:
+  Implement the compliance audit trail and Auditor role endpoints for tracking money movements and user actions.
+- **What the AI generated or suggested**:
+  - The AI suggested generating standard CRUD endpoints for `audit_events`, including `PUT` and `DELETE` endpoints to allow administrators to "archive or purge" historical logs.
+- **What was incorrect, incomplete or risky**:
+  - In a financial banking and ledger application, exposing modification (`UPDATE`) or removal (`DELETE`) endpoints on audit records violates fundamental accounting compliance (SOC 2, RBI guidelines).
+  - A compromised administrator account could tamper with or erase evidence of unauthorized transactions.
+- **How I verified the issue**:
+  - Evaluated against threat category `THREAT-12` (Audit Record Tampering) in `THREATS.md`.
+- **What I changed or rejected**:
+  - Rejected all update and delete capabilities on audit entities.
+  - Restricted `AuditService` strictly to append-only insertions (`save`), with zero exposed deletion or modification APIs.
+  - Configured `AuditorController` with read-only endpoints protected by `@PreAuthorize("hasAnyRole('AUDITOR', 'ADMINISTRATOR')")`.
+  - Added endpoint `GET /api/auditor/ledger-integrity` allowing auditors to mathematically prove that `Total Debits == Total Credits` across all accounts in real time.
+- **Relevant Git commit**: [`8a414e8`](file:///C:/Users/venug/.gemini/antigravity/scratch/ledgerline) ("docs: complete comprehensive README, 15-point THREATS model, PROMPTS log, and official challenge submission answers")
