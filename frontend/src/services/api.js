@@ -1,7 +1,18 @@
 // frontend/src/services/api.js
 // Centralized API Service Layer for LedgerLine
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8088';
+function resolveApiBaseUrl() {
+    if (import.meta.env.VITE_API_BASE_URL) {
+        return import.meta.env.VITE_API_BASE_URL.replace(/\/$/, '');
+    }
+    // When running in the browser on Render, automatically route to the deployed backend
+    if (typeof window !== 'undefined' && window.location.hostname.includes('onrender.com')) {
+        return 'https://ledgerline-i15k.onrender.com';
+    }
+    return 'http://localhost:8088';
+}
+
+const API_BASE_URL = resolveApiBaseUrl();
 
 export async function apiRequest(endpoint, options = {}) {
     const token = localStorage.getItem('ledgerline_token');

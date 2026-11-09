@@ -149,28 +149,34 @@ cd backend
 .\mvnw.cmd test
 ```
 
-### Verified Test Suite (17 Tests, 0 Failures):
-1. **`AuthenticationSecurityTests`**:
+### Verified Test Suite (22 Tests, 0 Failures):
+1. **`HealthControllerTests`**:
+   - `healthCheckReturnsOk`: Verifies `GET /api/health` returns HTTP 200 and status UP.
+   - `rootHealthCheckReturnsOk`: Verifies `GET /health` returns HTTP 200 for platform health probes.
+   - `rootEndpointReturnsOk`: Verifies `GET /` returns HTTP 200 for root service verification.
+   - `corsPreflightFromRenderFrontendAllowed`: Verifies `OPTIONS` preflight from deployed Render frontend origin is allowed.
+   - `loginWithCorsFromRenderFrontendOrigin`: Verifies `POST /api/auth/login` includes `Access-Control-Allow-Origin` and credentials for Render frontend.
+2. **`AuthenticationSecurityTests`**:
    - `validLoginReturnsJwtToken`: Verifies valid login returns cryptographic JWT.
    - `invalidPasswordReturns401`: Verifies incorrect password returns 401 with sanitized error.
    - `unauthenticatedRequestToProtectedEndpointReturns401`: Verifies protected endpoints reject unauthenticated calls.
-2. **`RoleAuthorizationSecurityTests`**:
+3. **`RoleAuthorizationSecurityTests`**:
    - `accountHolderDeniedAdminEndpoint`: Proves Account Holder cannot call `/api/admin/*` (403 Forbidden).
    - `auditorDeniedTransferExecution`: Proves Auditor cannot execute money movements (403 Forbidden).
    - `adminCanAccessAdminUsers`: Proves Administrator can access administrative users.
    - `auditorCanAccessAuditLogs`: Proves Auditor can access read-only audit trail.
-3. **`AccountOwnershipTests`**:
+4. **`AccountOwnershipTests`**:
    - `aliceCannotWithdrawFromBobsAccount`: Proves Alice cannot withdraw from Bob's account (403 Forbidden).
    - `aliceCannotTransferOutOfBobsAccount`: Proves Alice cannot transfer out of Bob's account (403 Forbidden).
    - `aliceCannotViewBobsStatement`: Proves Alice cannot view Bob's account statement (403 Forbidden).
-4. **`FinancialEngineTests`**:
+5. **`FinancialEngineTests`**:
    - `depositCreatesBalancedEntries`: Verifies atomic balance update and balancing debit/credit entries.
    - `withdrawalRejectsOverdraft`: Verifies insufficient funds rejection leaves balance intact.
    - `internalTransferExecutesAtomically`: Verifies money conservation across internal transfers.
-5. **`IdempotencyTests`**:
+6. **`IdempotencyTests`**:
    - `duplicateIdempotencyKeyReplaysResponseWithoutRetransfer`: Verifies duplicate requests do not move money twice.
    - `keyReusedWithDifferentPayloadThrowsConflict`: Verifies key reused with altered payload is rejected (409 Conflict).
-6. **`ConcurrencyTests`**:
+7. **`ConcurrencyTests`**:
    - `concurrentWithdrawalsNeverOverdraw`: 10 simultaneous threads fire withdrawals on an account with ₹1,000. Exactly 5 succeed, 5 are rejected, ending balance is strictly ₹0.00.
    - `bidirectionalTransfersDoNotDeadlock`: 20 concurrent bidirectional transfers (A->B and B->A) execute across 4 threads without deadlocks due to deterministic lock ordering.
 

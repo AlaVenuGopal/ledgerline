@@ -29,7 +29,7 @@
 - [x] Audit trail works (append-only events logged with IP, timestamp, actor, status).
 - [x] Backend starts and serves live traffic on port 8088 (`http://localhost:8088/api/health`).
 - [x] Frontend starts and connects to live backend on port 5173 (`http://127.0.0.1:5173`).
-- [x] Production builds pass (`mvnw.cmd clean test` passes 17/17; Vite `npm run build` passes).
+- [x] Production builds pass (`mvnw.cmd clean test` passes 22/22; Vite `npm run build` passes).
 - [x] README.md is accurate with verified Windows commands.
 - [x] THREATS.md is accurate with 15-point threat model, mitigations, and test mappings.
 - [x] PROMPTS.md has 7 genuine dated entries with commit links.
@@ -72,13 +72,15 @@
 [INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
 [INFO] Running com.snovasys.ledgerline.FinancialEngineTests
 [INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Running com.snovasys.ledgerline.HealthControllerTests
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0
 [INFO] Running com.snovasys.ledgerline.IdempotencyTests
 [INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
 [INFO] Running com.snovasys.ledgerline.RoleAuthorizationSecurityTests
 [INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
 [INFO]
 [INFO] Results:
-[INFO] Tests run: 17, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 22, Failures: 0, Errors: 0, Skipped: 0
 [INFO] BUILD SUCCESS
 ```
 
